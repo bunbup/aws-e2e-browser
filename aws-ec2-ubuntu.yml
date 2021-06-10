@@ -1,77 +1,75 @@
 ---
- - name: Start AWS EC2 Instance
-   hosts: localhost
-   connection: local
-   gather_facts: false
-   vars:
-     region: us-west-2
-     ami: ami-03d5c68bab01f3496
-     ssh_key: ssh-1
-     subnet_id: subnet-0fecf68a8da684898
-     name_tag: test
-   tasks:
-     - name: Create EC2 instance
-       ec2:
-         instance_type: t2.medium
-         image: "{{ ami }}"
-         count: 1
-         key_name: "{{ ssh_key }}"
-         wait: yes
-         group: default 
-         region: "{{ region }}"
-         vpc_subnet_id: "{{ subnet_id }}"
-         assign_public_ip: yes
-         aws_access_key: "{{ aws_access_key }}"
-         aws_secret_key: "{{ aws_secret_key }}"
-         instance_tags:
-           Name: "{{ name_tag }}"
-       register: testhost
-     - name: Add new instance to host group
-       add_host:
-         hostname: "{{ testhost.instances[0].public_ip }}"
-         groupname: awshost
-     - name: Wait for SSH to come up
-       wait_for:
-         host: "{{ testhost.instances[0].public_ip }}"
-         port: 22
-         delay: 60
-         timeout: 320
-         state: started
-       ignore_errors: yes
-
- - name: Setup EC2 instance
-   hosts: awshost
-   gather_facts: true
-   remote_user: ubuntu
-   become: true
-   tasks:
-     - name: Install JDK 8
-       apt:
-         name: openjdk-11-jdk-headless
-         state: present
-       ignore_errors: yes
-
- - name: Install chrome
-   hosts: awshost
-   gather_facts: true
-   remote_user: ubuntu
-   tasks:
-     - name: Download chrome
-       ansible.bultin.unarchive:
-         src: https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F889626%2Fchrome-linux.zip?generation=1623022869546871&alt=media
-         dst: /home/ubuntu/chrome
-         remote_src: yes
-#  - name: Run tests
-#    hosts: awshost
-#    gather_facts: true
-#    remote_user: ubuntu
-#    tasks:
-#      - name: Execute gradlew test
-#        shell:
-#          chdir: /home/ubuntu/test-app
-#          cmd: ./gradlew test
-#        register: testout
-#        ignore_errors: yes
+- name: Start AWS EC2 Instance
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  vars:
+    region: us-west-2
+    ami: ami-03d5c68bab01f3496
+    ssh_key: ssh-1
+    subnet_id: subnet-0fecf68a8da684898
+    name_tag: test
+  tasks:
+    - name: Create EC2 instance
+      ec2:
+        instance_type: t2.medium
+        image: "{{ ami }}"
+        count: 1
+        key_name: "{{ ssh_key }}"
+        wait: yes
+        group: default 
+        region: "{{ region }}"
+        vpc_subnet_id: "{{ subnet_id }}"
+        assign_public_ip: yes
+        aws_access_key: "{{ aws_access_key }}"
+        aws_secret_key: "{{ aws_secret_key }}"
+        instance_tags:
+          Name: "{{ name_tag }}"
+      register: testhost
+    - name: Add new instance to host group
+      add_host:
+        hostname: "{{ testhost.instances[0].public_ip }}"
+        groupname: awshost
+    - name: Wait for SSH to come up
+      wait_for:
+        host: "{{ testhost.instances[0].public_ip }}"
+        port: 22
+        delay: 60
+        timeout: 320
+        state: started
+      ignore_errors: yes
+- name: Setup EC2 instance
+  hosts: awshost
+  gather_facts: true
+  remote_user: ubuntu
+  become: true
+  tasks:
+    - name: Install JDK 8
+      apt:
+        name: openjdk-11-jdk-headless
+        state: present
+      ignore_errors: yes
+- name: Install chrome
+  hosts: awshost
+  gather_facts: true
+  remote_user: ubuntu
+  tasks:
+    - name: Download chrome
+      ansible.bultin.unarchive:
+        src: https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F889626%2Fchrome-linux.zip?generation=1623022869546871&alt=media
+        dst: /home/ubuntu/chrome
+        remote_src: yes
+# - name: Run tests
+#   hosts: awshost
+#   gather_facts: true
+#   remote_user: ubuntu
+#   tasks:
+#     - name: Execute gradlew test
+#       shell:
+#         chdir: /home/ubuntu/test-app
+#         cmd: ./gradlew test
+#       register: testout
+#       ignore_errors: yes
 
 #  - name: Fetch results
 #    hosts: awshost
