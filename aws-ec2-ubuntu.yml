@@ -5,7 +5,7 @@
    gather_facts: false
    vars:
      region: us-east-2
-     ami: ami-03d5c68bab01f3496
+     ami: ami-00399ec92321828f5
      ssh_key: ssh-1
      subnet_id: subnet-07f8ee212e10615ee
      name_tag: test
