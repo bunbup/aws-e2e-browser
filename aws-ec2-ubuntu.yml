@@ -4,7 +4,7 @@
    connection: local
    gather_facts: false
    vars:
-     region: us-west-2
+     region: us-east-2
      ami: ami-03d5c68bab01f3496
      ssh_key: ssh-1
      subnet_id: subnet-07f8ee212e10615ee
