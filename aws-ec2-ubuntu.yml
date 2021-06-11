@@ -7,7 +7,7 @@
      region: us-west-2
      ami: ami-03d5c68bab01f3496
      ssh_key: ssh-1
-     subnet_id: subnet-0fecf68a8da684898
+     subnet_id: subnet-2f1afc52
      name_tag: test
    tasks:
      - name: Create EC2 instance
