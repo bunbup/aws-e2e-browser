@@ -6,7 +6,7 @@
    vars:
      region: us-east-2
      ami: ami-00399ec92321828f5
-     ssh_key: ssh-1
+     ssh_key: e2e-browser-poc
      subnet_id: subnet-07f8ee212e10615ee
      name_tag: test
    tasks:
