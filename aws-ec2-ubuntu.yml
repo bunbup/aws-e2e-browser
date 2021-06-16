@@ -7,7 +7,7 @@
      region: us-east-2
      ami: ami-00399ec92321828f5
      ssh_key: e2e-browser-poc
-     subnet_id: subnet-07f8ee212e10615ee
+     subnet_id: subnet-491b5205
      name_tag: test
    tasks:
      - name: Create EC2 instance
@@ -45,33 +45,71 @@
    remote_user: ubuntu
    become: true
    tasks:
-     - name: Install JDK 8
+     - name: 
        apt:
-         name: openjdk-11-jdk-headless
+         name: 
+          - unzip
+          - libatk-bridge2.0-0
+          - libatk1.0-0
+          - libnss3
+          - libcups2
+          - libxkbcommon0
+          - libxcomposite1
+          - libxdamage1
+          - libxfixes3
+          - libxrandr2
+          - libxkbcommon0
+          - libgbm1
+          - libxshmfence1
+          - libx11-xcb1
+          - libpango-1.0-0
+          - libcairo2
+          - nodejs
+          - npm
          state: present
+         update_cache: yes
        ignore_errors: yes
-
  - name: Install chrome
    hosts: awshost
    gather_facts: true
    remote_user: ubuntu
+   become: true
    tasks:
      - name: Download chrome
        ansible.builtin.unarchive:
          src: https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F889626%2Fchrome-linux.zip?generation=1623022869546871&alt=media
-         dst: /home/ubuntu/chrome
+         dest: /home/ubuntu
          remote_src: yes
-#  - name: Run tests
-#    hosts: awshost
-#    gather_facts: true
-#    remote_user: ubuntu
-#    tasks:
-#      - name: Execute gradlew test
-#        shell:
-#          chdir: /home/ubuntu/test-app
-#          cmd: ./gradlew test
-#        register: testout
-#        ignore_errors: yes
+         owner: ubuntu
+         group: ubuntu
+ - name: Copy tests
+   hosts: awshost
+   gather_facts: true
+   remote_user: ubuntu
+   tasks:
+     - name: Copy test
+       ansible.builtin.copy:
+         src: project
+         dest: /home/ubuntu
+         owner: ubuntu
+       ignore_errors: yes
+ - name: Run tests
+   hosts: awshost
+   gather_facts: true
+   remote_user: ubuntu
+   tasks:
+     - name: Install project dependencies
+       shell:
+         chdir: /home/ubuntu/project
+         cmd: npm install
+       register: testout
+       ignore_errors: yes
+     - name: Run tests
+       shell:
+         chdir: /home/ubuntu/project
+         cmd: npm test
+       register: testout
+       ignore_errors: yes
 
 #  - name: Fetch results
 #    hosts: awshost
