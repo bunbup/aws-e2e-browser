@@ -149,7 +149,7 @@
    connection: local
    gather_facts: false
    vars:
-      region: {{ region }}
+      region: us-east-2
    tasks:
      - name: Terminate EC2 instance
        ec2:
