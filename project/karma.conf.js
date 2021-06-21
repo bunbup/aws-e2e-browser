@@ -3,7 +3,10 @@ module.exports = function(config) {
       frameworks: ['mocha', 'chai'],
       files: ["node_modules/pubnub/dist/web/pubnub.js",
       'test/*.js'],
-      reporters: ['progress'],
+      reporters: ['mocha', 'html'],
+      htmlReporter: {
+        outputFile: 'report.html'
+      },
       port: 9876,  // karma web server port
       colors: true,
       logLevel: config.LOG_INFO,

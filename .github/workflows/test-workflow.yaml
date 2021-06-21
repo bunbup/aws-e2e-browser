@@ -26,7 +26,7 @@ jobs:
           ansible
           boto
           boto3
-                
+    
     - name: run ansible-playbook
       run: ansible-playbook aws-ec2-ubuntu.yml --extra-vars "ansible_ssh_private_key_file=ssh-1.pem aws_access_key=${{ secrets.AWS_ACCESS_KEY }} aws_secret_key=${{ secrets.AWS_SECRET_KEY }}"
 
@@ -36,3 +36,6 @@ jobs:
       with:
         name: reports
         path: output
+    
+    - name: Check return code
+      run: bash -c 'exit `cat output/return-code.txt`'
