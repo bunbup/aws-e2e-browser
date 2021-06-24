@@ -77,7 +77,7 @@
    tasks:
      - name: Download chrome
        ansible.builtin.unarchive:
-         src: https://www.googleapis.com/download/storage/v1/b/chromium-browser-snapshots/o/Linux_x64%2F889626%2Fchrome-linux.zip?generation=1623022869546871&alt=media
+         src: '{{ chrome_url }}'
          dest: /home/ubuntu
          remote_src: yes
          owner: ubuntu
