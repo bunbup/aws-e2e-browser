@@ -77,7 +77,7 @@
    tasks:
      - name: Download chrome
        ansible.builtin.unarchive:
-         src: '{{ chrome_url }}'
+         src: "{{ chrome_url }}"
          dest: /home/ubuntu
          remote_src: yes
          owner: ubuntu
